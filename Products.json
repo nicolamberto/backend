@@ -1,0 +1,11 @@
+[
+	{
+		"id": 1,
+		"title": "celular",
+		"description": "celular",
+		"price": 200,
+		"thumbnail": "aaa",
+		"code": "ac2fr",
+		"stock": 10
+	}
+]
