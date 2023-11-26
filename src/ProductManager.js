@@ -1,4 +1,4 @@
-const fs = require("fs")
+import fs from "fs"
 
 class ProductManager {
     constructor(fileName) {
@@ -46,37 +46,44 @@ class ProductManager {
       return this.products;
     }
 
-    async deleteProduct(id) {
-        const product = this.products.find((p) => p.id === id);
-    
-        if (!product) {
-          return console.log("El post no existe");
-        }
-    
-        const index = this.products.findIndex((p) => p.id === id);
-    
-        try {
-          this.products.splice(index, 1);
-          await fs.promises.writeFile(
-            this.path,
-            JSON.stringify(this.products, null, "\t")
-          );
-        } catch (error) {
-          console.log("hubo un error");
-          return;
-        }
+    async getProductById(id) {
+      const product = this.products.find(item => item.id === id)
+      return product
+    }
+
+    async deleteProduct(id){
+      try {
+          const prodsPrev = await this.products
+          const prodsNewArray = prodsPrev.filter(u=> u.id !== id)
+          await fs.promises.writeFile(this.fileName, JSON.stringify(prodsNewArray))
+          console.log("product deleted");
+
+      } catch (error) {
+          return error
       }
-
-
-
   }
 
 
 
+      async updateProduct(id, obj){
+        try {
+            const prodsPrev = await this.products
+            const prodIndex = prodsPrev.findIndex(u=> u.id === id)
+            if(prodIndex === -1){
+                return 'El producto que quieres actualizar no se encuentra disponible'
+            } 
+            const product = prodsPrev[prodIndex]
+            const prodUpdate = {...product, ...obj}
+            prodsPrev[prodIndex] = prodUpdate
+            await fs.promises.writeFile(this.fileName, JSON.stringify(prodsPrev))
+        } catch (error) {
+            return error
+        }
+    }
 
+  }
 
-
-  class Product {
+  export class Product {
     constructor(id, title, description, price, thumbnail, code, stock) {
       this.id = id;
       this.title = title;
@@ -95,4 +102,7 @@ class ProductManager {
   
   const manager = new ProductManager("./Products.json");
 
-  manager.addProduct(product1)
+  //manager.updateProduct(2, product3)
+
+
+  export default ProductManager

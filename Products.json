@@ -7,5 +7,14 @@
 		"thumbnail": "aaa",
 		"code": "ac2fr",
 		"stock": 10
+	},
+	{
+		"id": 2,
+		"title": "eeeee",
+		"description": "celular",
+		"price": 200,
+		"thumbnail": "dddd",
+		"code": "ac2fr",
+		"stock": 11
 	}
 ]
