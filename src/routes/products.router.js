@@ -1,67 +1,67 @@
 import { Router } from "express";
 import ProductManager from '../ProductManager.js'
+import { Product } from "../ProductManager.js";
 
 const router = Router()
 
 const manager = new ProductManager("./Products.json")
 
-router.get('/', async (req, res)=>{
+router.get('/', async (req, res) => {
     try {
         const products = await manager.getProducts()
-        res.status(200).json({message:'Products', products})
+        return res.status(200).json({ message: 'Products', products })
     } catch (error) {
         return error
     }
 })
 
 
-router.get('/:pid', async(req,res)=>{
+router.get('/:pid', async (req, res) => {
     const { pid } = req.params
     const products = manager.getProducts()
-    const product = products.find((product)=> product.id === Number(pid))
+    const product = products.find((product) => product.id === Number(pid))
     //const product = manager.getProductById(Number(id))
 
-    if(product){
-        res.json(product)
+    if (product) {
+        return res.json(product)
     }
-    res.json({error: "product not found"})
+    res.json({ error: "product not found" })
 })
 
 
-router.post('/', async(req, res)=>{
+router.post('/', async (req, res) => {
+    const { title, description, code, price, status, stock, category, thumbnails } = req.body;
+
     try {
-        const newProduct = await manager.addProduct({id, title, description})
-        res.status(200).json({message:'User Created', user: newProduct })
+        const newProduct = await manager.addProduct({ title, description, code, price, status, stock, category, thumbnails })
+        if( !title || !description || !code || !price || !status || !stock || !category || !thumbnails){
+            return res.status(500).json({message: 'Missing some data'})
+        } else
+        return res.status(200).json({ message: 'User Created', user: newProduct })
     } catch (error) {
-        res.status(500).json({error})
+        return res.status(500).json({ error })
     }
 })
 
 
-router.put('/:pid',async (req, res)=>{
+router.put('/:pid', async (req, res) => {
     const { pid } = req.params;
-    const { title, description } = req.body;
 
-    manager.updateProduct(Number(pid), {title, description})
-  
-    res.json({
-      status: "Actualizado",
-      product: {
-        id: Number(pid),
-        title,
-        description,
-      },
+    manager.updateProduct(Number(pid),req.body)
+
+    res.status(200).json({
+        status: "Actualizado"
     })
 })
 
 
-router.delete('/:pid',async (req, res)=>{
-    const {pid} = req.params
+router.delete('/:pid', async (req, res) => {
+    const { pid } = req.params
     try {
         const response = await manager.deleteProduct(+pid)
-        res.status(200).json({message:'Product deleted.'})
+        res.status(200).json({ message: 'Product deleted.' })
     } catch (error) {
-        res.status(500).json({error})
+        res.status(500).json({ error })
     }
 })
 

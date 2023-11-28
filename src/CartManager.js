@@ -38,12 +38,14 @@ class CartManager {
 
     async addProduct(idCart, idProduct){
         const carts = await this.getCart()
-        const cart = carts.find(i=>i.id===id)
-        const userIndex = cart.products.findIndex(i=>i.product===id)
-        if(userIndex === -1){
+        console.log(carts.products);
+        const cart = carts.find(i=>i.id===idCart)
+        const prodIndex = cart.products.findIndex(i=>i.product===idProduct)
+       
+        if(prodIndex === -1){
             cart.products.push({product:idProduct, quantity:1})
         } else {
-            cart.products[userIndex].quantity++
+            cart.products[prodIndex].quantity++
         }
         await fs.promises.writeFile(this.path, JSON.stringify(cart))
         return cart
@@ -52,10 +54,6 @@ class CartManager {
 }
 
 
-async function prueba() {
-}
-
-prueba()
-
 const manager = new CartManager("Carts.json")
+
 export default CartManager

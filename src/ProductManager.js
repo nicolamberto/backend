@@ -29,7 +29,15 @@ class ProductManager {
     }
   
     async addProduct(product) {
-      this.products.push(product);
+      const products = await this.getProducts()
+      let id
+        if (!products.length) {
+            id = 1
+        } else {
+            id = products[products.length - 1].id + 1
+        }
+        const newProduct = {...product, id}
+        products.push(newProduct)
   
       const respuesta = await this.saveFile(this.products);
   
@@ -62,8 +70,6 @@ class ProductManager {
           return error
       }
   }
-
-
 
       async updateProduct(id, obj){
         try {
