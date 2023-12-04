@@ -29,11 +29,12 @@ router.post('/', async (req, res)=>{
 
 router.post('/:idCart/product/:idProduct', async (req, res)=>{
     const {idCart, idProduct} = req.params
+    console.log(req.params);
     try {
-        const addProduct = await CartManager.addProduct(Number(idCart), Number(idProduct))
+        const addProduct = await manager.addProduct(Number(idCart), Number(idProduct))
         return res.status(200).json({message:'Product-Cart', product:addProduct})
     } catch (error) {
-        return res.status(500).json({message: error})
+        return res.status(500).json({message: error })
         
     }
 })

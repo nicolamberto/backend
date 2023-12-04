@@ -1,4 +1,5 @@
 import fs from 'fs'
+import { stringify } from 'querystring'
 
 class CartManager {
     constructor(path) {
@@ -38,9 +39,21 @@ class CartManager {
 
     async addProduct(idCart, idProduct){
         const carts = await this.getCart()
-        console.log(carts.products);
-        const cart = carts.find(i=>i.id===idCart)
-        const prodIndex = cart.products.findIndex(i=>i.product===idProduct)
+        const carrito = carts.find(i=> i.id === idCart)
+
+        const indexProd = carrito.products.findIndex(i=> i.product === idProduct)
+        const indexCart = carts.findIndex(i=> i.id === idCart)
+        if(indexProd === -1){
+            carrito.products.push({"product": idProduct, "quantity": 1})
+
+        } else {
+            carrito.products[indexProd].quantity++
+        } 
+        /* const newCart = carts.splice(indexCart, 1, carrito) */
+        await fs.promises.writeFile(this.path, JSON.stringify(carts))
+        return carrito
+       /*  const cart = carts.find(i=>i.id===idCart)
+        const prodIndex = cart.products.findIndex(i=>i.product===id)
        
         if(prodIndex === -1){
             cart.products.push({product:idProduct, quantity:1})
@@ -48,12 +61,11 @@ class CartManager {
             cart.products[prodIndex].quantity++
         }
         await fs.promises.writeFile(this.path, JSON.stringify(cart))
-        return cart
+        return cart */
     }
 
 }
 
 
-const manager = new CartManager("Carts.json")
 
 export default CartManager
