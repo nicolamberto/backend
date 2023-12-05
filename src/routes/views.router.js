@@ -16,6 +16,11 @@ router.get("/form", (req, res) => {
     });
   });
 
+
+  router.get('/realtimeproducts' ,(req, res)=> {
+    res.render('realtimeproducts')
+  })
+
   const users = [];
 
   

@@ -5,9 +5,19 @@ import viewRouter from './routes/views.router.js'
 import handlebars from 'express-handlebars'
 import { __dirname } from './utils.js'
 
-//import ProductManager from './ProductManager.js'
 
 const app = express()
+import { Server } from 'socket.io'
+
+const PORT = 8080 
+const httpServer = app.listen(PORT,()=>{
+    console.log('escuchando al puerto 8080');
+})
+
+const socketServer = new Server(httpServer)
+
+//import ProductManager from './ProductManager.js'
+
 
 app.engine('hbs', handlebars.engine({
     extname: 'hbs',
@@ -28,9 +38,3 @@ app.use('/products', ProductsRouter)
 app.use('/carts', CartRouter)
 app.use('/', viewRouter)
 
-
-const PORT = 8080
-
-app.listen(PORT,()=>{
-    console.log('escuchando al puerto 8080');
-})
