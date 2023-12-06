@@ -17,8 +17,9 @@ router.get("/form", (req, res) => {
   });
 
 
-  router.get('/realtimeproducts' ,(req, res)=> {
-    res.render('realtimeproducts')
+  router.get('/realtimeproducts' , async(req, res)=> {
+    const products = await manager.getProducts()
+    res.render('realtimeproducts', {products})
   })
 
   const users = [];
