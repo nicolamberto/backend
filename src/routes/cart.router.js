@@ -1,10 +1,21 @@
 import { Router } from "express";
 import CartManager from '../CartManager.js'
+import cartDao from "../daos/dbManager/cart.dao.js";
 
 
 const router = Router()
 
 const manager = new CartManager("./Carts.json")
+
+router.get('/', async (req, res)=>{
+    try {
+        const carts = await cartDao.getCarts()
+        return res.status(200).json({message:'CARTS', carts});
+        
+    } catch (error) {
+        return error
+    }
+})
 
 router.get('/:cid', async(req, res)=>{
     const {cid} = req.params 
@@ -18,9 +29,11 @@ router.get('/:cid', async(req, res)=>{
 
 
 router.post('/', async (req, res)=>{
+
     try {
-        const createCart = await manager.createCart()
-        return res.status(200).json({message:'Cart', cart:createCart})
+        const cart = req.body
+        const response = await cartDao.createCart(cart)
+        return res.status(200).json({message:'OK', cart: response})
     } catch (error) {
         return res.status(500).json({error})
     }

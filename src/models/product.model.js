@@ -9,6 +9,6 @@ const productSchema = new Schema({
     stock: {type: Number, required: true}
 })
 
-const productModel = model('products', productSchema)
+const productModel = model('prods', productSchema)
 
 export {productModel}
