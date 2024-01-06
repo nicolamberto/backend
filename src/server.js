@@ -4,21 +4,15 @@ import CartRouter from "./routes/cart.router.js"
 import viewRouter from './routes/views.router.js'
 import handlebars from 'express-handlebars'
 import { __dirname } from './utils.js'
-import ProductManager from './ProductManager.js'
+import mongoose from 'mongoose'
 
 const app = express()
-import { Server } from 'socket.io'
 
 
-const PORT = 8080
-const httpServer = app.listen(PORT, () => {
-    console.log('escuchando al puerto 8080');
-})
-
-const socketServer = new Server(httpServer)
-
-//import ProductManager from './ProductManager.js'
-
+mongoose
+    .connect('mongodb+srv://nicolamberto:2840@backend.kobvof3.mongodb.net/backend?retryWrites=true&w=majority')
+    .then(()=> console.log('DB connected'))
+    .catch((err)=>console.log(err))
 
 app.engine('hbs', handlebars.engine({
     extname: 'hbs',
@@ -30,7 +24,6 @@ app.set('views', __dirname + '/views');
 
 app.use(express.static(__dirname + '/public'))
 
-const manager = new ProductManager("./Products.json")
 
 app.use(express.json())
 app.use(urlencoded({ extended: true }))
@@ -39,17 +32,7 @@ app.use('/products', ProductsRouter)
 app.use('/carts', CartRouter)
 app.use('/', viewRouter)
 
-
-socketServer.on('connection', async (socketClient) => {
-
-    console.log('nuevo cliente conectado');
-    const products = await manager.getProducts()
-
-    socketClient.on("form_message", (data) => {
-        console.log(data);
-        products.push(data);
-        socketClient.emit("users_list", products);
-    });
-
-    //socketClient.emit("users_list", products);
+const PORT = 8080
+app.listen(PORT, () => {
+    console.log('escuchando al puerto 8080');
 })
