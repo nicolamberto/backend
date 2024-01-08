@@ -3,8 +3,10 @@ import ProductsRouter from "./routes/products.router.js"
 import CartRouter from "./routes/cart.router.js"
 import viewRouter from './routes/views.router.js'
 import handlebars from 'express-handlebars'
+import Handlebars from 'handlebars'
 import { __dirname } from './utils.js'
 import mongoose from 'mongoose'
+import { allowInsecurePrototypeAccess } from '@handlebars/allow-prototype-access'
 
 const app = express()
 
@@ -15,8 +17,10 @@ mongoose
     .catch((err)=>console.log(err))
 
 app.engine('hbs', handlebars.engine({
+   // handlebars: allowInsecurePrototypeAccess(handlebars),
     extname: 'hbs',
     defaultLayout: 'main',
+    handlebars: allowInsecurePrototypeAccess(Handlebars)
 }))
 
 app.set('view engine', 'hbs')

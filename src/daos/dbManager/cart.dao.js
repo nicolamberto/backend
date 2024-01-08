@@ -17,8 +17,8 @@ class CartDao {
         return await cartModel.findByIdAndUpdate({_id}, product)
     }
 
-    async deleteProduct(_id){
-        return await cartModel.findByIdAndDelete({_id})
+    async deleteProduct(_cid, _pid){
+        return await cartModel.findByIdAndDelete({_id, _pid})
     }
 }
 

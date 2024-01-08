@@ -2,13 +2,22 @@ import { Router } from "express";
 import ProductManager from '../ProductManager.js'
 import { Product } from "../ProductManager.js";
 import productDao from "../daos/dbManager/product.dao.js";
+import { productModel } from "../models/product.model.js";
 const router = Router()
 
 const manager = new ProductManager("./Products.json")
 
 router.get('/', async (req, res) => {
+    const { page, limit, sort } = req.query
     try {
-        const products = await productDao.getAllProducts()
+        const products = await productModel.paginate(
+            {
+            },
+            {
+                page: page || 1,
+                limit: limit || 10
+            }
+        )
         return res.status(200).json({ message: 'Products', products })
     } catch (error) {
         return error
@@ -18,10 +27,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:pid', async (req, res) => {
     const { pid } = req.params
-    const products = manager.getProducts()
-    const product = products.find((product) => product.id === Number(pid))
-    //const product = manager.getProductById(Number(id))
-
+    const products = productDao.getProductById(pid)
     if (product) {
         return res.json(product)
     }
@@ -51,7 +57,7 @@ router.put('/:pid', async (req, res) => {
 
         const response = await productDao.updateProduct(pid, product)
         return res.json({
-            message:'OK',
+            message: 'OK',
             response,
         })
 
