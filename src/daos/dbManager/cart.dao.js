@@ -1,6 +1,8 @@
 import { cartModel } from "../../models/cart.model.js"
 
 class CartDao {
+
+
     async getCarts(){
         return await cartModel.find().populate('products.product')
     }
@@ -13,12 +15,12 @@ class CartDao {
         return await cartModel.create(cart)
     }
 
-    async updateProduct(_id, product){
-        return await cartModel.findByIdAndUpdate({_id}, product)
+    async updateCart(_id, cart){
+        return await cartModel.findByIdAndUpdate({_id}, cart)
     }
 
-    async deleteProduct(_cid, _pid){
-        return await cartModel.findByIdAndDelete({_id, _pid})
+    async deleteProduct(_pid){
+        return await cartModel.findByIdAndDelete({_pid})
     }
 }
 

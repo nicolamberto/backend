@@ -8,17 +8,10 @@ const router = Router()
 const manager = new ProductManager("./Products.json")
 
 router.get('/', async (req, res) => {
-    const { page, limit, sort } = req.query
+    const { page, limit, query, sort } = req.query
     try {
-        const products = await productModel.paginate(
-            {
-            },
-            {
-                page: page || 1,
-                limit: limit || 10
-            }
-        )
-        return res.status(200).json({ message: 'Products', products })
+        const products = await productDao.getAllProducts(page, limit, query, sort)
+        res.status(200).json({message: 'OK', products})
     } catch (error) {
         return error
     }
