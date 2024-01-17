@@ -2,11 +2,15 @@ import express, { urlencoded } from 'express'
 import ProductsRouter from "./routes/products.router.js"
 import CartRouter from "./routes/cart.router.js"
 import viewRouter from './routes/views.router.js'
+import usersViewsRouter from './routes/users.router.js'
+import sessionsRouter from './routes/sessions.router.js'
 import handlebars from 'express-handlebars'
 import Handlebars from 'handlebars'
 import { __dirname } from './utils.js'
 import mongoose from 'mongoose'
 import { allowInsecurePrototypeAccess } from '@handlebars/allow-prototype-access'
+import session from 'express-session'
+import MongoStore from 'connect-mongo'
 
 const app = express()
 
@@ -25,6 +29,22 @@ app.engine('hbs', handlebars.engine({
 
 app.set('view engine', 'hbs')
 app.set('views', __dirname + '/views');
+app.set(express.static(__dirname+'/public'))
+
+app.use(session({
+
+    store: MongoStore.create({
+      mongoUrl:'mongodb+srv://nicolamberto:2840@backend.kobvof3.mongodb.net/backend?retryWrites=true&w=majority', 
+      mongoOptions:{ useNewUrlParser:true, useUnifiedTopology:true},
+      ttl:10 * 60
+    }),
+  
+    secret: "Th1s1sA5ecret",
+    resave:false,
+    saveUninitialized:true
+  
+  }))
+  
 
 app.use(express.static(__dirname + '/public'))
 
@@ -35,6 +55,8 @@ app.use(urlencoded({ extended: true }))
 app.use('/products', ProductsRouter)
 app.use('/carts', CartRouter)
 app.use('/', viewRouter)
+app.use('/users',usersViewsRouter)
+app.use('/api/sessions', sessionsRouter)
 
 const PORT = 8080
 app.listen(PORT, () => {

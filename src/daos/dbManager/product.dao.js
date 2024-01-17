@@ -8,7 +8,7 @@ class ProductDao {
         }
         return await productModel.paginate(consulta, { limit: limit, page: page, sort: sort == undefined ? {} : { price: Number(sort) } })
 
-    }
+    }mongo
 
     async getProductById(_id) {
         return await productModel.findById({ _id })

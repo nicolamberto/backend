@@ -1,57 +1,19 @@
-import { Router } from "express";
-import ProductManager from "../ProductManager.js";
-import { productModel } from "../models/product.model.js";
-import productDao from "../daos/dbManager/product.dao.js";
-
+import {Router} from 'express'
+import productDao from '../daos/dbManager/product.dao.js'
+import cartDao from '../daos/dbManager/cart.dao.js'
 const router = Router()
-const manager = new ProductManager("./Products.json")
 
-router.get('/', async (req, res)=>{
-  const {page, limit, order} = req.query
-const products = await productModel.paginate(
-  {
-    //criterio de busqueda, aca podes poner un sort por ejemplo o buscar por palabras
-  },
-  {
-    page:page||1,
-    limit:limit||10
-  } 
-).sort({price: 1})
-res.render('index', {products})
+router.get('/',async (req,res)=>{
+    const { limit,page,query,sort } = req.query
+    const productos = await productDao.getAllProducts(limit, page, query, sort);
+    
+    res.render("products",{productos, user:req.session.user})
 })
 
-router.get('/productos', async (req, res)=>{
-  const products = await productModel.paginate(
-  )
-  console.log(products);
-  res.json(products)
+router.get('/carts/:cid',async (req,res)=>{
+    const {cid} = req.params
+    const productos = await cartDao.getProductsFromCart(cid)
+    console.log(productos)
+    res.render("cart",{productos})
 })
-
-router.get("/form", (req, res) => {
-    res.render("form", {
-      title: "Form example",
-      fileCss: "styles.css",
-    });
-  });
-
-
-/*   router.get('/realtimeproducts' , async(req, res)=> {
-    const products = await manager.getProducts()
-    res.render('realtimeproducts', {products})
-  })
- */
-  
-router.post("/user", (req, res) => {
-  const { name, age } = req.body;
-
-  users.push({
-    name,
-    age,
-  });
-
-  console.log(users);
-
-  res.redirect("/");
-});
-
 export default router

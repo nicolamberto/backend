@@ -11,20 +11,20 @@ router.get('/', async (req, res) => {
     const { page, limit, query, sort } = req.query
     try {
         const products = await productDao.getAllProducts(page, limit, query, sort)
-        res.status(200).json({message: 'OK', products})
+        res.status(200).json({ message: 'OK', products })
     } catch (error) {
-        return error
+        return res.status(500).json({ error: error })
     }
 })
 
 
 router.get('/:pid', async (req, res) => {
     const { pid } = req.params
-    const products = productDao.getProductById(pid)
+    const product = productDao.getProductById(pid)
     if (product) {
-        return res.json(product)
+        return res.status(200).json({ message: 'OK', product })
     }
-    res.json({ error: "product not found" })
+    return res.status(500).json({ error: error })
 })
 
 
@@ -32,13 +32,13 @@ router.post('/', async (req, res) => {
     try {
         const product = req.body
         const response = await productDao.createProduct(product)
-        res.json({
+        res.status(200).json({
             message: 'OK',
             response
         })
 
     } catch (error) {
-        return error
+        return res.status(500).json({ error: error })
     }
 })
 
@@ -49,13 +49,13 @@ router.put('/:pid', async (req, res) => {
         const product = req.body
 
         const response = await productDao.updateProduct(pid, product)
-        return res.json({
+        return res.status(200).json({
             message: 'OK',
             response,
         })
 
     } catch (error) {
-        return error
+        return res.status(500).json({ error: error })
     }
 })
 
@@ -66,7 +66,7 @@ router.delete('/:pid', async (req, res) => {
         const response = await productDao.deleteProduct(pid)
         res.status(200).json({ message: 'Product deleted.', response })
     } catch (error) {
-        res.status(500).json({ error })
+        res.status(500).json({ error: error })
     }
 })
 
