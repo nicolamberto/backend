@@ -15,6 +15,8 @@ import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import passport from 'passport';
 import initializePassport from './config/passport.config.js'
+//Custom - Extended
+import UsersExtendRouter from './routes/custom/users.extend.router.js'
 
 const app = express()
 
@@ -67,6 +69,10 @@ app.use("/api/jwt", jwtRouter)
 app.use('/users',usersViewsRouter)
 app.use('/api/sessions', sessionsRouter)
 app.use('github', GithubLoginViewRouter)
+
+const usersExtendRouter = new UsersExtendRouter();
+app.use("/api/extend/users", usersExtendRouter.getRouter());
+
 
 const PORT = 8080
 app.listen(PORT, () => {

@@ -16,7 +16,7 @@ export const isValidPassword = (user, password) => {
 }
 
 
-const PRIVATE_KEY = "CoderhouseBackendCourseSecretKeyJWT";
+export const PRIVATE_KEY = "CoderhouseBackendCourseSecretKeyJWT";
 
 /**
  * Generate token JWT usando jwt.sign:

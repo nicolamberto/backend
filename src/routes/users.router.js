@@ -1,6 +1,7 @@
 import {Router } from 'express'
 import { authToken } from '../utils.js';
 import { passportCall, authorization } from "../utils.js";
+import passport from 'passport';
 
 const router = Router();
 
@@ -15,7 +16,7 @@ router.get("/register", (req,res)=>{
 router.get("/",
     // authToken, //-> Usando Authorization Bearer Token
     // passport.authenticate('jwt', { session: false }), //-> Usando JWT por Cookie
-    passportCall('jwt'), //-> Usando passport-JWT por Cookie mediante customCall
+    //passportCall('jwt'), //-> Usando passport-JWT por Cookie mediante customCall
     authorization('user'),
     (req, res) => {
         res.render("profile", {
