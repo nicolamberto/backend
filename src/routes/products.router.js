@@ -1,4 +1,40 @@
-import { Router } from "express";
+import {Router} from 'express'
+import { getAllProducts, getProduct, createProduct, updateProduct, deleteProduct } from '../controllers/products.controller.js'
+const router = Router()
+
+
+
+router.get('/', getAllProducts)
+
+router.get('/:pid', getProduct)
+
+router.post('/', createProduct)
+
+router.put('/:pid', updateProduct)
+
+router.delete('/:pid', deleteProduct)
+
+export default router
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* import { Router } from "express";
 import ProductManager from '../ProductManager.js'
 import { Product } from "../ProductManager.js";
 import productDao from "../daos/dbManager/product.dao.js";
@@ -70,4 +106,4 @@ router.delete('/:pid', async (req, res) => {
     }
 })
 
-export default router
+export default router */

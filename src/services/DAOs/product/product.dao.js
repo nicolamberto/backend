@@ -1,4 +1,4 @@
-import { productModel } from "../../models/product.model.js";
+import { productModel } from "../../../models/product.model.js";
 
 class ProductDao {
     async getAllProducts(limit = 10, page = 1, query, sort) {
