@@ -1,30 +1,27 @@
-import { productModel } from "../../../models/product.model.js";
-
-class ProductDao {
-    async getAllProducts(limit = 10, page = 1, query, sort) {
+import {productModel} from "../../../models/product.model.js"
+export default class ProductDao {
+    async getAllProducts(limit = 10 , page = 1, query, sort ){
         let consulta = {}
-        if (query != undefined) {
+        if (query != undefined){
             consulta[query.split(":")[0]] = query.split(":")[1]
         }
-        return await productModel.paginate(consulta, { limit: limit, page: page, sort: sort == undefined ? {} : { price: Number(sort) } })
-
+        return await productModel.paginate(consulta,{limit:limit,page:page,sort:sort == undefined ? {}: {price:Number(sort)}})
+            
     }
 
-    async getProductById(_id) {
-        return await productModel.findById({ _id })
+    async getProductById(id){
+        return await productModel.findById(id)
     }
 
-    async createProduct(product) {
+    async createProduct(product){
         return await productModel.create(product)
     }
 
-    async updateProduct(_id, product) {
-        return await productModel.findByIdAndUpdate({ _id }, product)
+    async updateProduct(id,product){
+        return await productModel.findByIdAndUpdate(id,product)
     }
 
-    async deleteProduct(_id) {
-        return await productModel.findByIdAndDelete({ _id })
+    async deleteProduct(id){
+        return await productModel.findByIdAndDelete(id)
     }
 }
-
-export default new ProductDao

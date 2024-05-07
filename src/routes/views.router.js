@@ -1,6 +1,6 @@
 import {Router} from 'express'
 import { productService, cartService } from '../services/services.js'
-
+import { chatRenderer } from '../controllers/chat.controller.js'
 const router = Router()
 
 router.get('/',async (req,res)=>{
@@ -17,14 +17,6 @@ router.get('/carts/:cid',async (req,res)=>{
     res.render("cart",{productos})
 })
 
-router.get('/chat',(req,res)=>{
-    if(req.session.user.rol === 'user'){
-    res.render('chat',{})
-    }
-    else{
-        res.render('denied')
-    }
-})
-
+router.get('/chat', chatRenderer)
 
 export default router
